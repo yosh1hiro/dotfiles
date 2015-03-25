@@ -1,5 +1,4 @@
-" 行番号表示
-set number
+et number
 set tabstop=2
 set shiftwidth=2
 set expandtab
