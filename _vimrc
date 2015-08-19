@@ -1,105 +1,98 @@
+syntax enable
+
 set number
+set ruler
+set list
+set listchars=tab:>-,trail:-,nbsp:%,extends:>,precedes:<,eol:<
+set incsearch
+set hlsearch
+set nowrap
+set showmatch
+set whichwrap=h,l
+set nowrapscan
+set ignorecase
+set smartcase
+set hidden
+set history=2000
+set autoindent
+set expandtab
 set tabstop=2
 set shiftwidth=2
-set expandtab
-set autoindent 
+set helplang=en
+
+colorscheme desert
 
 
-"---------------------------"
-" Start Neobundle Settings.
-"---------------------------
-" bundleで管理するディレクトリを指定
-set runtimepath+=~/.vim/bundle/neobundle.vim/
- 
- " Required:
- call neobundle#begin(expand('~/.vim/bundle/'))
-  
-  " neobundle自体をneobundleで管理
-  NeoBundleFetch 'Shougo/neobundle.vim'
-   
-   " 今後このあたりに追加のプラグインをどんどん書いて行きます！！"
+" neobundle settings {{{
+if has('vim_starting')
+  set nocompatible
+  " neobundle をインストールしていない場合は自動インストール
+  if !isdirectory(expand("~/.vim/bundle/neobundle.vim/"))
+    echo "install neobundle..."
+  " vim からコマンド呼び出しているだけ neobundle.vim のクローン
+    :call system("git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim")
+  endif
+  " runtimepath の追加は必須
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+call neobundle#begin(expand('~/.vim/bundle'))
+let g:neobundle_default_git_protocol='https'
 
-   " neocomplcache
-   NeoBundle 'Shougo/neocomplcache'
-   " Disable AutoComplPop.
-    let g:acp_enableAtStartup = 0
-   " Use neocomplcache.
-    let g:neocomplcache_enable_at_startup = 1
-   " Use smartcase.
-    let g:neocomplcache_enable_smart_case = 1
-   " Set minimum syntax keyword length.
-    let g:neocomplcache_min_syntax_length = 3
-    let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-    " インデントに色を付けて見やすくする
-    NeoBundle 'nathanaelkane/vim-indent-guides'
-    "
-    " vimを立ち上げたときに、自動的にvim-indent-guidesをオンにする
-    let g:indent_guides_enable_on_vim_startup = 1
-    
-    " ファイルオープンを便利に
-    NeoBundle 'Shougo/unite.vim'
-    " Unite.vimで最近使ったファイルを表示できるようにする
-    NeoBundle 'Shougo/neomru.vim'
-    "
-    " http://blog.remora.cx/2010/12/vim-ref-with-unite.html
-    """"""""""""""""""""""""""""""
-    " Unit.vimの設定
-    """"""""""""""""""""""""""""""
-    " 入力モードで開始する
-    let g:unite_enable_start_insert=1
-    " バッファ一覧
-    noremap <C-P> :Unite buffer<CR>
-    " ファイル一覧
-    noremap <C-N> :Unite -buffer-name=file file<CR>
-    " 最近使ったファイルの一覧
-    noremap <C-Z> :Unite file_mru<CR>
-    " sourcesを「今開いているファイルのディレクトリ」とする
-    noremap :uff :<C-u>UniteWithBufferDir file -buffer-name=file<CR>
-    " ウィンドウを分割して開く
-    au FileType unite nnoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
-    au FileType unite inoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
-    " ウィンドウを縦に分割して開く
-    au FileType unite nnoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-    au FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-    " ESCキーを2回押すと終了する
-    au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
-    au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
-    """"""""""""""""""""""""""""""
-   " ファイルをtree表示してくれる
-   NeoBundle 'scrooloose/nerdtree'
-   "
-   " Define dictionary.
-    let g:neocomplcache_dictionary_filetype_lists = {
-        \ 'default' : ''
-            \ }
-   "
-   "         " Plugin key-mappings.
-            inoremap <expr><C-g>     neocomplcache#undo_completion()
-            inoremap <expr><C-l>     neocomplcache#complete_common_string()
-   "
-   "         " Recommended key-mappings.
-   "         " <CR>: close popup and save indent.
-            inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-            function! s:my_cr_function()
-              return neocomplcache#smart_close_popup() . "\<CR>"
-              endfunction
-   "           " <TAB>: completion.
-              inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-   "           " <C-h>, <BS>: close popup and delete backword char.
-              inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-              inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-              inoremap <expr><C-y>  neocomplcache#close_popup()
-              inoremap <expr><C-e>  neocomplcache#cancel_popup()
+" neobundle#begin - neobundle#end の間に導入するプラグインを記載します。
+NeoBundleFetch 'Shougo/neobundle.vim'
+" ↓こんな感じが基本の書き方
+NeoBundle 'nanotech/jellybeans.vim'
 
-    call neobundle#end()
-     
-     " Required:
-     filetype plugin indent on
-      
-      " 未インストールのプラグインがある場合、インストールするかどうかを尋ねてくれるようにする設定
-      " 毎回聞かれると邪魔な場合もあるので、この設定は任意です。
-      NeoBundleCheck
-       
-       "-------------------------
-       " End Neobundle Settings.
-       "-------------------------
+" vimrc に記述されたプラグインでインストールされていないものがないかチェックする
+NeoBundleCheck
+call neobundle#end()
+filetype plugin indent on
+
+if has('lua')
+  NeoBundleLazy 'Shougo/neocomplete.vim', {
+    \ 'depends' : 'Shougo/vimproc',
+    \ 'autoload' : { 'insert' : 1,}
+    \ }
+endif
+
+" neocomplete {{{
+let g:neocomplete#enable_at_startup               = 1
+let g:neocomplete#auto_completion_start_length    = 3
+let g:neocomplete#enable_ignore_case              = 1
+let g:neocomplete#enable_smart_case               = 1
+let g:neocomplete#enable_camel_case               = 1
+let g:neocomplete#use_vimproc                     = 1
+let g:neocomplete#sources#buffer#cache_limit_size = 1000000
+let g:neocomplete#sources#tags#cache_limit_size   = 30000000
+let g:neocomplete#enable_fuzzy_completion         = 1
+let g:neocomplete#lock_buffer_name_pattern        = '\*ku\*'
+" }}}
+
+NeoBundleLazy 'Shougo/vimfiler', {
+  \ 'depends' : ["Shougo/unite.vim"],
+  \ 'autoload' : {
+  \   'commands' : [ "VimFilerTab", "VimFiler", "VimFilerExplorer", "VimFilerBufferDir" ],
+  \   'mappings' : ['<Plug>(vimfiler_switch)'],
+  \   'explorer' : 1,
+  \ }}
+
+
+" vimfiler {{{
+let g:vimfiler_as_default_explorer  = 1
+let g:vimfiler_safe_mode_by_default = 0
+let g:vimfiler_data_directory       = expand('~/.vim/etc/vimfiler')
+nnoremap <silent><C-u><C-j> :<C-u>VimFilerBufferDir -split -simple -winwidth=35 -no-quit -toggle<CR>
+" }}}
+
+NeoBundle 'Townk/vim-autoclose'
+
+NeoBundleLazy 'junegunn/vim-easy-align', {
+  \ 'autoload': {
+  \   'commands' : ['EasyAlign'],
+  \   'mappings' : ['<Plug>(EasyAlign)'],
+  \ }}
+
+" vim-easy-align {{{
+vmap <Enter> <Plug>(EasyAlign)
+nmap <Leader>a <Plug>(EasyAlign)
+" }}}
